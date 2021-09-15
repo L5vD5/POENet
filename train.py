@@ -62,7 +62,20 @@ def main(config):
                       valid_data_loader=valid_data_loader,
                       lr_scheduler=lr_scheduler)
     trainer.train()
+    jointTwist = trainer.model.poe.getJointTwist()
+    M_se3 = trainer.model.poe.M_se3
+    train_x_gpu = data_loader.dataset.x.to(device)
+    train_output = trainer.model(train_x_gpu).cpu()
+    train_target = data_loader.dataset.y
+    jointAngle = trainer.model.getJointAngle(train_x_gpu).cpu()
 
+    with torch.no_grad():
+        np.savetxt('jointAngle.txt', jointAngle, delimiter=',')
+        np.savetxt('jointTwist.txt', jointTwist.cpu(), delimiter=',')
+        np.savetxt('M_se3.txt', M_se3.cpu(), delimiter=',')
+        np.savetxt('nominalTwist.txt', trainer.model.poe.nominalTwist.cpu(), delimiter=',')
+        np.savetxt('outputPose.txt', skew_se3(logSE3(train_output)), delimiter=',')
+        np.savetxt('targetPose.txt', skew_se3(logSE3(train_target)), delimiter=',')
 
 if __name__ == '__main__':
 
