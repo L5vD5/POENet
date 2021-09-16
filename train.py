@@ -48,10 +48,10 @@ def main(config):
     # build optimizer, learning rate scheduler. delete every lines containing lr_scheduler for disabling scheduler
     poelyr_params = list(map(lambda x: x[1], list(filter(lambda named_params: 'poe' in named_params[0], model.named_parameters()))))
     others_params = list(map(lambda x: x[1], list(filter(lambda named_params: 'poe' not in named_params[0], model.named_parameters()))))
-    # optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-2}, {'params': poelyr_params, 'lr': 1e-1}])
+    optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-2}, {'params': poelyr_params, 'lr': 1e-1}])
     # optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-3}, {'params': poelyr_params, 'lr': 1e-1}])
     # optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-3}, {'params': poelyr_params, 'lr': 1e-2}])
-    optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-4}, {'params': poelyr_params, 'lr': 1e-2}])
+    # optimizer = config.init_obj('optimizer', torch.optim, [{'params': others_params, 'lr': 1e-4}, {'params': poelyr_params, 'lr': 1e-2}])
 
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
 
